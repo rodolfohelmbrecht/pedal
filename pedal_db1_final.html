@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedal DB1 — 15 de Maio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ── CONFIGURAÇÃO: cole sua Master Key do JSONBin aqui ── */
+/* Veja o README abaixo para instruções                    */
+
+:root {
+  --or: #F26322;
+  --or-d: #C94E15;
+  --or-l: #FEF0E9;
+  --or-m: #F8936A;
+  --blk: #111110;
+  --blk2: #1C1C1A;
+  --wh: #FFFFFF;
+  --off: #F5F4F1;
+  --gy: #E8E6E1;
+  --gy-m: #C8C5BE;
+  --gy-d: #8A8780;
+  --tx: #111110;
+  --tx-m: #6B6860;
+  --bd: rgba(0,0,0,0.09);
+  --r: 12px;
+  --rs: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--off);
+  color: var(--tx);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* HEADER */
+.hdr {
+  background: var(--blk);
+  padding: 32px 20px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.hdr::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -35px;
+  width: 170px; height: 170px;
+  border-radius: 50%;
+  border: 42px solid rgba(242,99,34,0.11);
+}
+.hdr::after {
+  content: '';
+  position: absolute;
+  bottom: -45px; left: -18px;
+  width: 125px; height: 125px;
+  border-radius: 50%;
+  border: 30px solid rgba(242,99,34,0.07);
+}
+.db1-tag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--or);
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 99px;
+  margin-bottom: 14px;
+}
+.hdr h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.05;
+  margin-bottom: 12px;
+  position: relative;
+}
+.hdr h1 em { color: var(--or); font-style: normal; }
+.meta-row { display: flex; gap: 8px; flex-wrap: wrap; position: relative; }
+.mpill {
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.07);
+  padding: 4px 10px;
+  border-radius: 99px;
+}
+.mpill.hl { background: rgba(242,99,34,0.2); color: var(--or-m); }
+
+/* SEPTAGON STRIP */
+.sept {
+  background: var(--blk2);
+  padding: 10px 20px;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  scrollbar-width: none;
+}
+.sept::-webkit-scrollbar { display: none; }
+.stag {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.3);
+  white-space: nowrap;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1px solid rgba(255,255,255,0.07);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.stag.on { color: var(--or-m); border-color: rgba(242,99,34,0.4); background: rgba(242,99,34,0.08); }
+
+/* NAV */
+.nav {
+  background: var(--wh);
+  display: flex;
+  border-bottom: 1px solid var(--bd);
+  padding: 0 16px;
+  gap: 4px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.nb {
+  flex: 1;
+  padding: 14px 0 12px;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--tx-m);
+  background: none;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  cursor: pointer;
+  letter-spacing: .02em;
+  transition: all .2s;
+}
+.nb.on { color: var(--or); border-bottom-color: var(--or); }
+
+
+
+/* WRAP */
+.wrap { padding: 18px 16px 48px; max-width: 600px; margin: 0 auto; }
+.pg { display: none; }
+.pg.on { display: block; }
+.sec {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--tx-m);
+  margin: 18px 0 9px;
+}
+.sec:first-child { margin-top: 0; }
+
+/* USER GRID */
+.ugrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px; }
+.ucard {
+  background: var(--wh);
+  border: 1.5px solid var(--bd);
+  border-radius: var(--r);
+  padding: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: border-color .15s;
+}
+.ucard:hover { border-color: var(--gy-m); }
+.ucard.on { border-color: var(--or); background: var(--or-l); }
+.uav {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+  background: var(--blk);
+  color: var(--or);
+}
+.ucard.on .uav { background: var(--or); color: #fff; }
+.uname { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; color: var(--tx); }
+.upts { font-size: 12px; color: var(--tx-m); margin-top: 2px; }
+
+/* PROGRESS CARD */
+.pcrd {
+  background: var(--blk);
+  border-radius: var(--r);
+  padding: 18px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.pcrd::before {
+  content: '';
+  position: absolute;
+  top: -20px; right: -20px;
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  border: 22px solid rgba(242,99,34,0.13);
+}
+.ptop { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; position: relative; }
+.pname { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: #fff; }
+.psub { font-size: 12px; color: rgba(255,255,255,0.38); margin-top: 3px; }
+.pnum { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--or); line-height: 1; }
+.plbl { font-size: 11px; color: rgba(255,255,255,0.35); text-align: right; }
+.pbar-bg { background: rgba(255,255,255,0.1); border-radius: 99px; height: 6px; overflow: hidden; }
+.pbar-f { height: 100%; background: var(--or); border-radius: 99px; transition: width .5s cubic-bezier(.4,0,.2,1); }
+.ppct { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 5px; text-align: right; }
+
+/* CATEGORIES */
+.cath { display: flex; align-items: center; gap: 8px; padding: 13px 0 6px; }
+.cico { font-size: 14px; }
+.clbl {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--tx-m);
+  flex: 1;
+}
+.cstat { font-size: 12px; color: var(--gy-m); }
+
+/* CHECK ITEMS */
+.ci { background: var(--wh); border: 1px solid var(--bd); border-radius: var(--rs); margin-bottom: 5px; overflow: hidden; transition: border-color .15s; }
+.ci.done { border-left: 3px solid var(--or); }
+.crow { display: flex; align-items: center; gap: 10px; padding: 11px 12px; cursor: pointer; }
+.chk {
+  width: 20px; height: 20px;
+  border-radius: 5px;
+  border: 1.5px solid var(--gy-m);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  transition: all .15s;
+  background: var(--wh);
+  color: transparent;
+}
+.ci.done .chk { background: var(--or); border-color: var(--or); color: white; }
+.ctxt { flex: 1; font-size: 14px; line-height: 1.4; color: var(--tx); cursor: pointer; }
+.ci.done .ctxt { color: var(--tx-m); text-decoration: line-through; }
+.ibtn {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--gy);
+  background: var(--off);
+  color: var(--gy-d);
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.ibtn.on { background: var(--or-l); border-color: var(--or); color: var(--or-d); }
+.ppill {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 99px;
+  flex-shrink: 0;
+  background: var(--or-l);
+  color: var(--or-d);
+}
+.ci.done .ppill { background: var(--gy); color: var(--gy-d); }
+.tipbox { display: none; padding: 10px 14px 12px 42px; border-top: 1px solid var(--gy); background: #FAFAF8; }
+.tipbox.on { display: block; }
+.tipbox p { font-size: 13px; color: var(--tx-m); line-height: 1.65; }
+.tipbox strong { font-weight: 500; color: var(--tx); }
+
+/* RANKING */
+.rcrd {
+  background: var(--wh);
+  border: 1px solid var(--bd);
+  border-radius: var(--r);
+  padding: 13px 15px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all .2s;
+}
+.rcrd.top { background: var(--blk); border-color: transparent; }
+.rnum { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; width: 26px; text-align: center; color: var(--gy-m); flex-shrink: 0; }
+.rcrd.top .rnum { color: var(--or); }
+.rav {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  flex-shrink: 0;
+  background: var(--off);
+  color: var(--tx);
+}
+.rcrd.top .rav { background: var(--or); color: #fff; }
+.rinfo { flex: 1; min-width: 0; }
+.rname { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; color: var(--tx); }
+.rcrd.top .rname { color: #fff; }
+.rdet { font-size: 12px; color: var(--tx-m); margin-top: 2px; }
+.rcrd.top .rdet { color: rgba(255,255,255,0.38); }
+.rbar-bg { background: var(--gy); border-radius: 99px; height: 4px; overflow: hidden; margin-top: 6px; }
+.rcrd.top .rbar-bg { background: rgba(255,255,255,0.1); }
+.rbar-f { height: 100%; border-radius: 99px; background: var(--or); }
+.rpts { text-align: right; flex-shrink: 0; }
+.rpn { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--tx); }
+.rcrd.top .rpn { color: var(--or); }
+.rpl { font-size: 10px; color: var(--tx-m); }
+.rcrd.top .rpl { color: rgba(255,255,255,0.3); }
+
+.grow { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.gname { width: 72px; font-size: 13px; color: var(--tx-m); flex-shrink: 0; }
+.gbar { flex: 1; background: var(--gy); border-radius: 99px; height: 6px; overflow: hidden; }
+.gbar-f { height: 100%; background: var(--or); border-radius: 99px; transition: width .4s; }
+.gpct { font-size: 12px; font-weight: 500; color: var(--tx); width: 34px; text-align: right; flex-shrink: 0; }
+
+.ebanner {
+  background: var(--blk2);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.eico { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.eval { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 800; color: var(--or); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 3px; }
+.equote { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.5; font-style: italic; }
+
+.sync-row { display: flex; align-items: center; gap: 7px; margin-bottom: 14px; }
+.sdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; background: var(--or); }
+.sdot.live { animation: blink 1.8s infinite; }
+.sdot.err { background: #E24B4A; animation: none; }
+.sdot.idle { background: var(--gy-m); animation: none; }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.2;} }
+.stxt { font-size: 12px; color: var(--tx-m); }
+
+.totbanner {
+  background: var(--or-l);
+  border: 1px solid rgba(242,99,34,0.2);
+  border-radius: var(--r);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+.tlbl { font-size: 13px; color: var(--or-d); }
+.tval { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--or-d); }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="db1-tag">&#9679; DB1 Group</div>
+  <h1>Pedal<br><em>15 de Maio</em></h1>
+  <div class="meta-row">
+    <span class="mpill hl">Meta: 50 km</span>
+    <span class="mpill">Maringá, PR</span>
+    <span class="mpill">4 ciclistas</span>
+  </div>
+</div>
+
+<div class="sept">
+  <span class="stag on">Energy</span>
+  <span class="stag on">Team Spirit</span>
+  <span class="stag">Do Awesome Things</span>
+  <span class="stag">Locus of Control</span>
+  <span class="stag">To Infinity and Beyond</span>
+</div>
+
+<div class="nav">
+  <button class="nb on" onclick="showPg('ranking')">Ranking</button>
+  <button class="nb" onclick="showPg('checklist')">Checklist</button>
+</div>
+
+<div class="wrap">
+
+  <div id="pg-ranking" class="pg on">
+    <div class="ebanner">
+      <div class="eico">&#9889;</div>
+      <div>
+        <div class="eval">Energy &mdash; Valor DB1</div>
+        <div class="equote">&ldquo;Aqui, esforço e dedicação máxima é importante. Entregamos o máximo.&rdquo;</div>
+      </div>
+    </div>
+    <div class="sync-row">
+      <div class="sdot live" id="sync-dot"></div>
+      <span class="stxt" id="sync-txt">Conectando...</span>
+    </div>
+    <div id="rank-area"></div>
+    <div class="sec">Progresso do grupo</div>
+    <div id="group-area"></div>
+    <div id="tot-area"></div>
+  </div>
+
+  <div id="pg-checklist" class="pg">
+    <div class="sec">Quem está marcando?</div>
+    <div class="ugrid" id="ugrid"></div>
+    <div id="prog-area"></div>
+    <div id="items-area"></div>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  CONFIGURAÇÃO — preencha após criar sua conta JSONBin
+// ═══════════════════════════════════════════════════════
+let JSONBIN_KEY  = '$2a$10$OgkXmOh7Z9T7JXB5g6rZ9OS3SrML17tD6Xxtf4k31Pj9SE3/FXcqy';
+let JSONBIN_BIN  = '69e6b4db856a68218955a8bd';
+// ═══════════════════════════════════════════════════════
+
+const USERS = [
+  {id:'caua',     name:'Cauã',     init:'CA'},
+  {id:'henrique', name:'Henrique', init:'HE'},
+  {id:'turk',     name:'Turk',     init:'TU'},
+  {id:'rodox',    name:'Rodox',    init:'RO'},
+];
+
+const CATS = [
+  {id:'equip',  label:'Equipamentos', icon:'🔧'},
+  {id:'seg',    label:'Segurança',    icon:'🛡️'},
+  {id:'nutri',  label:'Nutrição',     icon:'🥗'},
+  {id:'treino', label:'Treino',       icon:'🚴'},
+];
+
+const ITEMS = [
+  {id:'e1',cat:'equip',pts:10,label:'Bike revisada na bike shop',tip:'<strong>Revisão completa:</strong> pneus calibrados (40–50 PSI), freios com força total, câmbio trocando suave em todas as marchas, corrente limpa. Bike parada mais de 3 meses? Vale trocar a corrente.'},
+  {id:'e2',cat:'equip',pts:5, label:'Capacete ajustado na cabeça',tip:'<strong>Teste rápido:</strong> coloque, balance a cabeça — se mexer, está folgado. Borda frontal: 2 dedos acima da sobrancelha. Presilha com 1 dedo de folga abaixo do queixo.'},
+  {id:'e3',cat:'equip',pts:5, label:'Luvas e óculos separados',tip:'<strong>Luvas</strong> protegem em quedas e evitam formigamento. <strong>Óculos</strong> impedem vento, poeira e insetos — especialmente em descidas rápidas.'},
+  {id:'e4',cat:'equip',pts:5, label:'Roupa confortável — bermuda acolchoada se possível',tip:'<strong>Bermuda acolchoada (chamois)</strong> faz a maior diferença em pedais acima de 1h. Evita dor e assadura. Evite jeans ou roupa muito larga.'},
+  {id:'e5',cat:'equip',pts:10,label:'Kit de manutenção — bomba, 2 câmaras, chaves allen',tip:'<strong>Kit mínimo:</strong> bombinha com manômetro, 2 câmaras do tamanho da roda (ex: 29x2.10), 2 desmontadores e chaves allen 4, 5 e 6mm.'},
+  {id:'e6',cat:'equip',pts:5, label:'Power bank carregado',tip:'<strong>10.000 mAh</strong> carrega a maioria dos celulares 2x. Com GPS ativo em 50 km, a bateria cai rápido. Leve o cabo junto.'},
+  {id:'s1',cat:'seg',pts:5,   label:'Protetor solar FPS 50+ passado antes de sair',tip:'<strong>Passe 20 min antes.</strong> Áreas críticas: nuca, costas dos braços, canelas e orelhas. Em 3–4h, reaplicar no intervalo.'},
+  {id:'s2',cat:'seg',pts:5,   label:'Repelente aplicado',tip:'<strong>DEET ou Icaridina</strong> nos tornozelos, pulsos e pescoço. Em trilhas com mata, aplique embaixo da roupa também.'},
+  {id:'s3',cat:'seg',pts:10,  label:'Número de emergência no celular e colado na bike',tip:'<strong>Mínimo:</strong> SAMU (192), Bombeiros (193) e 1 contato pessoal. Etiqueta no quadro com seu nome + contato de emergência.'},
+  {id:'s4',cat:'seg',pts:5,   label:'Endereço do ponto de encontro anotado',tip:'<strong>Salve offline</strong> — sem sinal, o Google Maps não funciona. Combine ponto físico claro e horário de espera caso o grupo se separe.'},
+  {id:'s5',cat:'seg',pts:5,   label:'Avisou alguém em casa — rota e horário de volta',tip:'<strong>Regra básica outdoor:</strong> alguém sabe onde você está e quando volta. Mande a localização da largada pelo WhatsApp antes de sair.'},
+  {id:'n1',cat:'nutri',pts:10,label:'2 garrafinhas d\'água ou mochila de hidratação',tip:'<strong>Mínimo 1,5L para 50 km com subidas.</strong> Ideal: 500ml por hora. Mochila camelback é mais prática. Beba antes de sentir sede.'},
+  {id:'n2',cat:'nutri',pts:10,label:'2 a 3 barras de cereal ou gel energético no bolso',tip:'<strong>Barras de cereal</strong> são melhores para iniciantes — mais fáceis de digerir. Coma uma a cada 45–60 min mesmo sem fome. Após 1h30 sem comer, o corpo trava.'},
+  {id:'n3',cat:'nutri',pts:5, label:'Refeição leve 2h antes do pedal',tip:'<strong>Carboidrato + proteína 2h antes</strong> (pão com ovo, tapioca, aveia com fruta). Evite frituras e alimentos pesados.'},
+  {id:'n4',cat:'nutri',pts:5, label:'Lanche de recuperação pós-pedal planejado',tip:'<strong>30–45 min após terminar,</strong> o corpo absorve muito melhor. Proteína + carboidrato reduz a fadiga do dia seguinte.'},
+  {id:'t1',cat:'treino',pts:15,label:'Treino 1 — pedal leve 8 km (semana 1)',tip:'<strong>Ritmo de conversa:</strong> você deve conseguir falar normalmente. Ajuste selim (joelho levemente dobrado no ponto mais baixo) e posição no guidão.'},
+  {id:'t2',cat:'treino',pts:15,label:'Treino 2 — subidas curtas 6 km (semana 1)',tip:'<strong>Troque para marcha leve ANTES da subida,</strong> nunca durante. Cadência alta, força baixa. Incline o corpo levemente para frente.'},
+  {id:'t3',cat:'treino',pts:15,label:'Treino 3 — pedal longo 8 km (semana 1)',tip:'<strong>Leve água e uma barrinha.</strong> Dor muscular é normal. Dor no joelho (articular) não — indica selim baixo ou marcha pesada demais.'},
+  {id:'t4',cat:'treino',pts:15,label:'Treino 1 — ritmo médio 10 km (semana 2)',tip:'<strong>Ritmo médio:</strong> frases curtas, não conversa longa. Velocidade constante. Hidrate a cada 20 min mesmo sem sede.'},
+  {id:'t5',cat:'treino',pts:20,label:'Treino 2 — treino de morro 8 km (semana 2)',tip:'<strong>3 a 4 subidas no mesmo treino.</strong> Suba, desça pedalando leve, suba de novo. Pode ser o mesmo morro.'},
+  {id:'t6',cat:'treino',pts:20,label:'Treino 3 — pedal longo 12 km (semana 2)',tip:'<strong>Simule o dia:</strong> mochila, hidratação e barrinhas. Pare 5 min no meio. Observe o que incomoda: capacete, selim, roupa.'},
+  {id:'t7',cat:'treino',pts:20,label:'Treino 1 — ritmo + morro 12 km (semana 3)',tip:'<strong>Combine distância e subidas</strong> pela primeira vez. Foco em completar sem parar — não em velocidade.'},
+  {id:'t8',cat:'treino',pts:15,label:'Treino 2 — recuperação ativa 8 km (semana 3)',tip:'<strong>Treino leve de propósito.</strong> Ritmo de conversa o tempo todo. Mantém o corpo ativo sem acumular fadiga.'},
+  {id:'t9',cat:'treino',pts:30,label:'Simulação — pedal longo 20 a 25 km (semana 3)',tip:'<strong>O treino mais importante.</strong> Mesmo horário, equipamento e alimentação do dia real. Se completar os 25 km, os 50 km do dia 15 são questão de ritmo.'},
+  {id:'t10',cat:'treino',pts:15,label:'Afunilamento — pedal leve 8 a 10 km (semana 4)',tip:'<strong>Não compense treinando mais nessa semana.</strong> Após esse pedal, descanso total até o dia 15. Durma bem nos 2 dias antes.'},
+];
+
+const MAX_PTS = ITEMS.reduce((s,i)=>s+i.pts,0);
+let state = {};
+let activeUser = USERS[0].id;
+let openTips = {};
+let pollTimer = null;
+let lastEtag = null;
+
+USERS.forEach(u => {
+  state[u.id] = {};
+  ITEMS.forEach(i => { state[u.id][i.id] = false; });
+});
+
+function pts(uid)    { return ITEMS.reduce((s,i)=>s+(state[uid][i.id]?i.pts:0),0); }
+function pct(uid)    { return Math.round(pts(uid)/MAX_PTS*100); }
+function catPts(u,c) { return ITEMS.filter(i=>i.cat===c).reduce((s,i)=>s+(state[u][i.id]?i.pts:0),0); }
+function catMax(c)   { return ITEMS.filter(i=>i.cat===c).reduce((s,i)=>s+i.pts,0); }
+
+function isConfigured() { return JSONBIN_KEY && JSONBIN_BIN; }
+
+function setSyncStatus(type, msg) {
+  const dot = document.getElementById('sync-dot');
+  const txt = document.getElementById('sync-txt');
+  if (!dot || !txt) return;
+  dot.className = 'sdot ' + type;
+  txt.textContent = msg;
+}
+
+// ── JSONBin API ──────────────────────────────────────
+
+async function fetchFromBin() {
+  const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}/latest`, {
+    headers: { 'X-Master-Key': JSONBIN_KEY }
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(()=>'');
+    throw new Error(`HTTP ${res.status} — ${body.slice(0,120)}`);
+  }
+  const data = await res.json();
+  lastEtag = res.headers.get('ETag') || null;
+  return data.record;
+}
+
+async function saveToBin(newState) {
+  const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Master-Key': JSONBIN_KEY
+    },
+    body: JSON.stringify(newState)
+  });
+  if (!res.ok) throw new Error(res.status);
+}
+
+async function loadRemote() {
+  try {
+    const remote = await fetchFromBin();
+    USERS.forEach(u => {
+      if (remote[u.id]) ITEMS.forEach(i => {
+        if (remote[u.id][i.id] !== undefined) state[u.id][i.id] = remote[u.id][i.id];
+      });
+    });
+    const now = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    setSyncStatus('live', `Ao vivo · ${now}`);
+    return true;
+  } catch(e) {
+    setSyncStatus('err', `Erro: ${e.message}`);
+    return { ok: false, error: e.message };
+  }
+}
+
+async function saveRemote() {
+  if (!isConfigured()) return;
+  setSyncStatus('live', 'Salvando...');
+  try {
+    await saveToBin(state);
+    const now = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    setSyncStatus('live', `Salvo às ${now}`);
+  } catch(e) {
+    setSyncStatus('err', 'Erro ao salvar');
+  }
+}
+
+async function poll() {
+  if (!isConfigured()) return;
+  try {
+    const remote = await fetchFromBin();
+    let changed = false;
+    USERS.forEach(u => {
+      if (remote[u.id]) ITEMS.forEach(i => {
+        if (remote[u.id][i.id] !== undefined && remote[u.id][i.id] !== state[u.id][i.id]) {
+          state[u.id][i.id] = remote[u.id][i.id];
+          changed = true;
+        }
+      });
+    });
+    if (changed) { renderRanking(); renderChecklist(); }
+    const now = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    setSyncStatus('live', `Ao vivo · ${now}`);
+  } catch(e) {
+    setSyncStatus('err', 'Sem conexão');
+  }
+}
+
+function startPolling() {
+  if (pollTimer) clearInterval(pollTimer);
+  pollTimer = setInterval(poll, 5000);
+}
+
+// ── RENDER ──────────────────────────────────────────
+
+function renderRanking() {
+  const sorted = [...USERS].sort((a,b)=>pts(b.id)-pts(a.id));
+  const maxP = Math.max(...sorted.map(u=>pts(u.id)), 1);
+  let html = '';
+  sorted.forEach((u,i) => {
+    const p = pts(u.id), done = ITEMS.filter(it=>state[u.id][it.id]).length;
+    const bw = Math.round(p/maxP*100), isTop = i===0 && p>0;
+    html += `<div class="rcrd${isTop?' top':''}">
+      <div class="rnum">${i+1}</div>
+      <div class="rav">${u.init}</div>
+      <div class="rinfo">
+        <div class="rname">${u.name}</div>
+        <div class="rdet">${done} de ${ITEMS.length} itens · ${pct(u.id)}%</div>
+        <div class="rbar-bg"><div class="rbar-f" style="width:${bw}%;"></div></div>
+      </div>
+      <div class="rpts"><div class="rpn">${p}</div><div class="rpl">pts</div></div>
+    </div>`;
+  });
+  const el = document.getElementById('rank-area');
+  if (el) el.innerHTML = html;
+
+  let gHtml = '';
+  USERS.forEach(u => {
+    const p = pct(u.id);
+    gHtml += `<div class="grow"><div class="gname">${u.name}</div><div class="gbar"><div class="gbar-f" style="width:${p}%;"></div></div><div class="gpct">${p}%</div></div>`;
+  });
+  const gel = document.getElementById('group-area');
+  if (gel) gel.innerHTML = gHtml;
+
+  const tot = USERS.reduce((s,u)=>s+pts(u.id),0);
+  const totMax = MAX_PTS * USERS.length;
+  const gPct = Math.round(tot/totMax*100);
+  const tel = document.getElementById('tot-area');
+  if (tel) tel.innerHTML = `<div class="totbanner"><span class="tlbl">Total do grupo</span><span class="tval">${tot} / ${totMax} pts · ${gPct}%</span></div>`;
+}
+
+function renderChecklist() {
+  let ug = '';
+  USERS.forEach(u => {
+    ug += `<div class="ucard${u.id===activeUser?' on':''}" onclick="setUser('${u.id}')">
+      <div class="uav">${u.init}</div>
+      <div><div class="uname">${u.name}</div><div class="upts">${pts(u.id)} pts · ${pct(u.id)}%</div></div>
+    </div>`;
+  });
+  const ugel = document.getElementById('ugrid');
+  if (ugel) ugel.innerHTML = ug;
+
+  const p = pts(activeUser), pc = pct(activeUser);
+  const done = ITEMS.filter(i=>state[activeUser][i.id]).length;
+  const pel = document.getElementById('prog-area');
+  if (pel) pel.innerHTML = `<div class="pcrd">
+    <div class="ptop">
+      <div><div class="pname">${USERS.find(u=>u.id===activeUser).name}</div><div class="psub">${done} de ${ITEMS.length} itens concluídos</div></div>
+      <div><div class="pnum">${p}</div><div class="plbl">pontos</div></div>
+    </div>
+    <div class="pbar-bg"><div class="pbar-f" style="width:${pc}%;"></div></div>
+    <div class="ppct">${pc}% completo</div>
+  </div>`;
+
+  let html = '';
+  CATS.forEach(cat => {
+    const catItems = ITEMS.filter(i=>i.cat===cat.id);
+    const cD = catItems.filter(i=>state[activeUser][i.id]).length;
+    html += `<div class="cath"><span class="cico">${cat.icon}</span><span class="clbl">${cat.label}</span><span class="cstat">${cD}/${catItems.length} · ${catPts(activeUser,cat.id)}/${catMax(cat.id)}pts</span></div>`;
+    catItems.forEach(item => {
+      const done = state[activeUser][item.id];
+      const key = activeUser+'__'+item.id;
+      const tipOn = openTips[key];
+      html += `<div class="ci${done?' done':''}">
+        <div class="crow">
+          <div class="chk" onclick="toggleCheck('${item.id}')">${done?'✓':''}</div>
+          <div class="ctxt" onclick="toggleCheck('${item.id}')">${item.label}</div>
+          <button class="ibtn${tipOn?' on':''}" onclick="toggleTip('${item.id}')">i</button>
+          <div class="ppill">+${item.pts}</div>
+        </div>
+        <div class="tipbox${tipOn?' on':''}"><p>${item.tip}</p></div>
+      </div>`;
+    });
+  });
+  const iel = document.getElementById('items-area');
+  if (iel) iel.innerHTML = html;
+}
+
+async function toggleCheck(id) {
+  state[activeUser][id] = !state[activeUser][id];
+  renderChecklist();
+  renderRanking();
+  await saveRemote();
+}
+
+function toggleTip(id) {
+  const key = activeUser+'__'+id;
+  openTips[key] = !openTips[key];
+  renderChecklist();
+}
+
+function setUser(uid) { activeUser = uid; renderChecklist(); }
+
+function showPg(p) {
+  document.querySelectorAll('.pg').forEach(el=>el.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(el=>el.classList.remove('on'));
+  document.getElementById('pg-'+p)?.classList.add('on');
+  document.querySelector(`.nb[onclick="showPg('${p}')"]`)?.classList.add('on');
+}
+
+// ── INIT ──────────────────────────────────────────────
+
+async function init() {
+  renderRanking();
+  renderChecklist();
+  if (isConfigured()) {
+    setSyncStatus('live', 'Conectando...');
+    await loadRemote();
+    renderRanking();
+    renderChecklist();
+    startPolling();
+  }
+}
+
+init();
+</script>
+
+<!--
+════════════════════════════════════════════════════════
+  README — COMO HOSPEDAR NO GITHUB PAGES
+════════════════════════════════════════════════════════
+
+1. JSONBIN (banco de dados gratuito)
+   ─────────────────────────────────
+   a) Acesse https://jsonbin.io e crie uma conta gratuita
+   b) Clique em "Create Bin"
+   c) No campo de conteúdo, cole: {}
+   d) Clique em Create → copie o BIN ID mostrado na URL
+   e) Vá em Account → API Keys → copie sua Master Key
+   f) Ao abrir o app, clique em Ranking e cole os dois valores
+
+2. GITHUB PAGES (hospedagem gratuita)
+   ────────────────────────────────────
+   a) Acesse github.com → New repository
+   b) Nome: pedal-db1  (pode ser qualquer nome)
+   c) Marque "Public" → Create repository
+   d) Clique em "uploading an existing file"
+   e) Arraste este arquivo HTML → renomeie para: index.html
+   f) Commit changes
+   g) Vá em Settings → Pages → Source: "Deploy from branch"
+      Branch: main → pasta: / (root) → Save
+   h) Aguarde ~1 minuto
+   i) Seu link será: https://SEU-USUARIO.github.io/pedal-db1
+
+3. COMPARTILHE
+   ────────────
+   Envie o link para Cauã, Henrique, Turk e Rodox.
+   Cada um abre no celular, insere a Master Key + Bin ID
+   uma única vez (fica salvo no navegador) e pronto —
+   ranking em tempo real para todo o grupo!
+
+════════════════════════════════════════════════════════
+-->
+</body>
+</html>
